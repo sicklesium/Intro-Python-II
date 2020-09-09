@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -39,6 +40,17 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player("Halcy", room["outside"])
+
+# initial stuff
+current = player.current_room
+
+print(f"You are currently at {current.name}. {current.description}.\n")
+
+# input prompt!
+
+command = input("Enter a command (n, e, s, w, or q): ")
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +61,26 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+# Start while loop, as long as q is not entered to quit, continue the loop
+while command != 'q':
+    # If a direction is entered use control flow to move player
+    if (command in ['n', 'e', 's', 'w']):
+        # If valid direction is entered, check for route existence
+        dir_attr = f"{command}_to"
+        if hasattr(current, dir_attr):
+            # If route exists, update current room and room items and print
+            current = getattr(current, dir_attr)
+            print(
+                f"You are currently at {current.name}. {current.description}.\n")
+        # If route does not exist, print error message
+        else:
+            print(f"There is nothing in that direction.")
+    # If a different command is entered let player know the command is not valid
+    else:
+        print(f"Please enter a valid command (n, e, s, w, or q).")
+    # Re-prompt after each while loop
+    command = input("Enter a command (n, e, s, w, or q): ")
+# If q is entered, print farewell message
+if (command == 'q'):
+    print(f"It's dangerous out there...")
